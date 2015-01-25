@@ -1819,15 +1819,15 @@ class Carbon extends DateTime
 
         // a little weeks per month, 365 days per year... good enough!!
         $divs = array(
-            'second' => self::SECONDS_PER_MINUTE,
-            'minute' => self::MINUTES_PER_HOUR,
-            'hour' => self::HOURS_PER_DAY,
-            'day' => self::DAYS_PER_WEEK,
-            'week' => 30 / self::DAYS_PER_WEEK,
-            'month' => self::MONTHS_PER_YEAR
+            'sek.' => self::SECONDS_PER_MINUTE,
+            'min' => self::MINUTES_PER_HOUR,
+            'godz.'   => self::HOURS_PER_DAY,
+            'd'    => self::DAYS_PER_WEEK,
+            't'   => 30/self::DAYS_PER_WEEK,
+            'mies.'  => self::MONTHS_PER_YEAR
         );
 
-        $unit = 'year';
+        $unit = 'rok';
 
         foreach ($divs as $divUnit => $divValue) {
             if ($delta < $divValue) {
@@ -1843,23 +1843,32 @@ class Carbon extends DateTime
         if ($delta == 0) {
             $delta = 1;
         }
+        
+        if ($delta == 1 && $unit == 'd')
+            $unit = 'dzień';
+        elseif ($unit == 'd')
+            $unit = 'dni';
+
+        if ($delta == 1 && $unit == 't')
+            $unit = 'tydz.';
+        elseif ($unit == 't')
+            $unit = 'tyg.';
 
         $txt = $delta . ' ' . $unit;
-        $txt .= $delta == 1 ? '' : 's';
 
         if ($isNow) {
             if ($isFuture) {
-                return $txt . ' from now';
+                return $txt . ' od teraz';
             }
 
-            return $txt . ' ago';
+            return $txt . ' temu';
         }
 
         if ($isFuture) {
-            return $txt . ' after';
+            return $txt . ' po';
         }
 
-        return $txt . ' before';
+        return $txt . ' przed';
     }
 
     ///////////////////////////////////////////////////////////////////
